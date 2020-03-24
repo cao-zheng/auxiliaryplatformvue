@@ -65,7 +65,8 @@ export default {
             this.disabled = false;
         },
         addClick(){
-            this.formData = { 
+            this.formData = {
+                jobId:"",
                 jobStatus:1,//默认开启
                 createTime:"0001-01-01 00:00:00",
                 updateTime:"0001-01-01 00:00:00",
