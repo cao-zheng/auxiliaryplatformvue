@@ -1,34 +1,45 @@
 <template>
-    <el-form :model="sysJobConfig" :rules="rules" ref="sysJobConfig" :label-width="formLabelWidth" :disabled="disabled">
-        <el-form-item label="任务名称" prop="name">
-            <el-input v-model="sysJobConfig.name"/>
-        </el-form-item>
-        <el-form-item label="作用类名称" prop="beanName">
-            <el-input v-model="sysJobConfig.beanName"/>
-        </el-form-item>
-        <el-form-item label="方法名称" prop="methodName">
-            <el-input v-model="sysJobConfig.methodName"/>
-        </el-form-item>
-        <el-form-item label="方法参数" prop="methodParams"> 
-            <el-input v-model="sysJobConfig.methodParams"  placeholder="多参数以分号;隔开(目前只支持string类型参数)"/>
-        </el-form-item>
-        <el-form-item label="cron表达式" prop="cronExpression">
-            <el-input v-model="sysJobConfig.cronExpression"/>
-        </el-form-item>
-        <el-form-item label="状态" prop="jobStatus">
-            <el-switch v-model="sysJobConfig.jobStatus"
-                        :active-value="1"
-                        :inactive-value="0"/>
-        </el-form-item>
-        <el-form-item label="备注" prop="remark">
-            <el-input v-model="sysJobConfig.remark"/>
-        </el-form-item>
-        <el-form-item>
-            <el-button type="primary" @click="submitForm('sysJobConfig')">确定</el-button>
-            <el-button @click="resetForm()">重置</el-button>
-            <el-button @click="formVisible()">取消</el-button>
-        </el-form-item>
-    </el-form>
+    <el-tabs v-model="tabsDefault" type="card" @tab-click="handleClick">
+        <el-tab-pane label="任务详情" name="first">
+            <el-form :model="sysJobConfig" :rules="rules" ref="sysJobConfig" :label-width="formLabelWidth" :disabled="disabled">
+                <el-form-item label="任务名称" prop="name">
+                    <el-input v-model="sysJobConfig.name"/>
+                </el-form-item>
+                <el-form-item label="作用类名称" prop="beanName">
+                    <el-input v-model="sysJobConfig.beanName"/>
+                </el-form-item>
+                <el-form-item label="方法名称" prop="methodName">
+                    <el-input v-model="sysJobConfig.methodName"/>
+                </el-form-item>
+                <el-form-item label="方法参数" prop="methodParams"> 
+                    <el-input v-model="sysJobConfig.methodParams"  placeholder="多参数以分号;隔开(目前只支持string类型参数)"/>
+                </el-form-item>
+                <el-form-item label="cron表达式" prop="cronExpression">
+                    <el-input v-model="sysJobConfig.cronExpression"/>
+                </el-form-item>
+                <el-form-item label="状态" prop="jobStatus">
+                    <el-switch v-model="sysJobConfig.jobStatus"
+                                :active-value="1"
+                                :inactive-value="0"/>
+                </el-form-item>
+                <el-form-item label="备注" prop="remark">
+                    <el-input v-model="sysJobConfig.remark"/>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="submitForm('sysJobConfig')">确定</el-button>
+                    <el-button @click="resetForm()">重置</el-button>
+                    <el-button @click="formVisible()">取消</el-button>
+                </el-form-item>
+            </el-form>
+        </el-tab-pane>
+        <el-tab-pane label="运行日志" name="second">
+            <el-table-column  prop="name" label="起始时间"></el-table-column>
+            <el-table-column  prop="beanName" label="终止时间"></el-table-column>
+            <el-table-column  prop="methodName" label="任务历时"></el-table-column>
+            <el-table-column  prop="methodParams" label="标题"></el-table-column>
+            <el-table-column  prop="cronExpression" label="是否成功"></el-table-column>
+        </el-tab-pane>
+    </el-tabs>
 </template>
 <script>
 let self;
@@ -43,7 +54,7 @@ export default {
     props:[
         "formData",
         "disabled",
-        "sysJobConfigFormVisible"
+        "sysJobConfigFormVisible",
     ],
     beforeCreate:function(){
         // 导入全局vueCompenent
@@ -62,7 +73,9 @@ export default {
     data: function() {
         return {
             formLabelWidth:"120px",//表单样式
+            tabsDefault:"first",
             sysJobConfig:{
+                jobId:"",
                 jobStatus:1,//默认开启
                 createTime:"0001-01-01 00:00:00",
                 updateTime:"0001-01-01 00:00:00",
@@ -134,8 +147,11 @@ export default {
         resetForm(){
             Object.assign(this.sysJobConfig,self.formData)
         },
-        formVisible(){//父组件传值给子组件
+        formVisible(){//子组件传值给父组件
             self.$emit("formVisible",false);
+        },
+        handleClick(tab, event){
+            console.log(tab, event);
         }
     }
 }

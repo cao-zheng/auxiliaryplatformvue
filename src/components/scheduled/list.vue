@@ -22,7 +22,7 @@
             </el-table-column>
         </el-table>
         <!-- 对话框 -->
-        <el-dialog title="任务详情" :visible.sync="sysJobConfigFormVisible">
+        <el-dialog  center title="定时任务"  :show-close="true" :visible.sync="sysJobConfigFormVisible" :destroy-on-close="true" :fullscreen="false">
             <scheduled-data :formData="formData" :disabled="disabled" :sysJobConfigFormVisible="sysJobConfigFormVisible" @formVisible="formVisible" @getList="getList"/>
         </el-dialog>
     </div>
