@@ -33,11 +33,13 @@
             </el-form>
         </el-tab-pane>
         <el-tab-pane label="运行日志" name="second">
-            <el-table-column  prop="name" label="起始时间"></el-table-column>
-            <el-table-column  prop="beanName" label="终止时间"></el-table-column>
-            <el-table-column  prop="methodName" label="任务历时"></el-table-column>
-            <el-table-column  prop="methodParams" label="标题"></el-table-column>
-            <el-table-column  prop="cronExpression" label="是否成功"></el-table-column>
+            <el-table :data="sysJobLog" border style="width: 100%">
+                <el-table-column  prop="startTime" label="起始时间"></el-table-column>
+                <el-table-column  prop="endTime" label="终止时间"></el-table-column>
+                <el-table-column  prop="time" label="任务历时"></el-table-column>
+                <el-table-column  prop="titleName" label="标题"></el-table-column>
+                <el-table-column  prop="resultFlag" label="是否成功"></el-table-column>
+            </el-table>
         </el-tab-pane>
     </el-tabs>
 </template>
@@ -86,6 +88,17 @@ export default {
                 cronExpression:"",
                 remark:""
             },
+            sysJobLog:[{
+                id:"",
+                startTime:"",
+                endTime:"",
+                time:"",
+                titleName:"",
+                resultFlag:"",
+                className:"",
+                methodName:"",
+                foreignId:""
+            }],
             rules:{
                 name:[
                     { required: true, message: '请输入定时任务名称', trigger: 'blur' }
@@ -151,7 +164,11 @@ export default {
             self.$emit("formVisible",false);
         },
         handleClick(tab, event){
-            console.log(tab, event);
+            self.axios.get("/logs/"+this.sysJobConfig.jobId).then((response)=>{
+                self.sysJobLog = response.data
+            }).catch(error=>{
+                console.log(error);
+            })
         }
     }
 }
